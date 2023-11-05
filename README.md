@@ -55,7 +55,7 @@ Responds with an error if there are no spaces available for given `from` and `to
 
 #### car-park.booking.destroy
 
-DELETE `api/car-park/1/booking/50`
+DELETE `api/car-park/1/booking/1`
 
 #### car-park.booking.update
 
