@@ -26,7 +26,7 @@ or
 
 GET `api/car-park/1?from=2023-11-10&to=2023-11-20`
 
-if `from` and `to` are passed to the endpoint it will return the number of available spaces and the price for that date range
+If `from` and `to` are passed to the endpoint it will return the number of available spaces and the price for that date range
 
 #### Booking
 
@@ -51,7 +51,7 @@ JSON Body:
 }
 ```
 
-responds with an error if `from` and `to` are not available
+Responds with an error if there are no spaces available for given `from` and `to`
 
 #### car-park.booking.destroy
 
