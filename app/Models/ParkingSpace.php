@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Carbon;
 
 class ParkingSpace extends Model
@@ -22,5 +21,16 @@ class ParkingSpace extends Model
     public function bookings(): HasMany
     {
         return $this->hasMany(Booking::class);
+    }
+
+    public function scopeAvailable(
+        Builder $query,
+        Carbon $from,
+        Carbon $to,
+    ): void {
+        $query->whereDoesntHave('bookings', fn (Builder $query) =>
+            $query->whereDate('from', '<', $to)
+                ->whereDate('to', '>', $from),
+        );
     }
 }
