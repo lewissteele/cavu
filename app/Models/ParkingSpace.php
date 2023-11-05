@@ -13,7 +13,7 @@ class ParkingSpace extends Model
 {
     use HasFactory;
 
-        public function carPark(): BelongsTo
+    public function carPark(): BelongsTo
     {
         return $this->belongsTo(CarPark::class);
     }
