@@ -5,62 +5,50 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreBookingRequest;
 use App\Http\Requests\UpdateBookingRequest;
 use App\Models\Booking;
+use App\Models\CarPark;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class BookingController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(CarPark $carPark): JsonResponse
     {
-        //
+        return response()->json($carPark->bookings()->get());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function store(
+        StoreBookingRequest $request,
+        CarPark $carPark,
+    ): Response {
+        $space = $carPark->parkingSpaces()->available(
+            $request->date('from'),
+            $request->date('to'),
+        )->firstOrFail();
+
+        $space->bookings()->create($request->validated());
+
+        return response()->noContent(Response::HTTP_CREATED);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreBookingRequest $request)
+    public function show(CarPark $carPark, Booking $booking): JsonResponse
     {
-        //
+        return response()->json($booking);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Booking $booking)
-    {
-        //
+    public function update(
+        UpdateBookingRequest $request,
+        CarPark $carPark,
+        Booking $booking,
+    ): Response {
+        $booking->updateOrFail($request->validated());
+
+        return response()->noContent();
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Booking $booking)
+    public function destroy(CarPark $carPark, Booking $booking): Response
     {
-        //
-    }
+        $booking->deleteOrFail();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateBookingRequest $request, Booking $booking)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Booking $booking)
-    {
-        //
+        return response()->noContent();
     }
 }
