@@ -9,15 +9,11 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class PriceFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
-            //
+            'date' => fake()->date(),
+            'price' => fake()->randomFloat(nbMaxDecimals: 2, min: 1, max: 20),
         ];
     }
 }
