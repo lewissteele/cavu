@@ -27,4 +27,24 @@ class CarPark extends Model
     {
         return $this->hasManyThrough(Booking::class, ParkingSpace::class);
     }
+
+    public function spacesAvailable(): Attribute
+    {
+        return Attribute::make(get: fn () => $this->parkingSpaces->count());
+    }
+
+    public function price(): Attribute
+    {
+        return Attribute::make(get: fn () => $this->prices->sum('price'));
+    }
+
+    public function available(Carbon $from, Carbon $to): self
+    {
+        return $this->load([
+            'parkingSpaces' => fn (HasMany $query) =>
+                $query->available($from, $to),
+            'prices' => fn (HasMany $query) =>
+                $query->whereBetween('date', [$from, $to]),
+        ]);
+    }
 }
